@@ -1,10 +1,9 @@
 on: [push]
 name: test coverage
 jobs:
-  runhaskell:
+  test_coverage:
     name: test coverage
     runs-on: ubuntu-latest # or macOS-latest, or windows-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-haskell@v1.1
@@ -14,4 +13,8 @@ jobs:
           enable-stack: true
           stack-version: 'latest'
       - run: stack test --coverage
-      - run: stack ghc --report . --destdir output
+      - run: stack hpc report . --destdir output
+      - uses: actions/upload-artifact@v2
+        with:
+          name: coverage-report
+          path: output
