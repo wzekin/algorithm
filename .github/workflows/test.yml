@@ -1,0 +1,17 @@
+on: [push]
+name: test coverage
+jobs:
+  runhaskell:
+    name: test coverage
+    runs-on: ubuntu-latest # or macOS-latest, or windows-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-haskell@v1.1
+        with:
+          ghc-version: '8.8.3' # Exact version of ghc to use
+          # cabal-version: 'latest'. Omitted, but defalts to 'latest'
+          enable-stack: true
+          stack-version: 'latest'
+      - run: stack test --coverage
+      - run: stack ghc --report . --destdir output
